@@ -22,7 +22,8 @@ object OverlayRenderer {
 
     fun draw(
         c: Canvas, w: Float, h: Float,
-        lines: List<Line>, accent: Int, scale: Float, position: Int
+        lines: List<Line>, accent: Int, scale: Float, position: Int,
+        insetTop: Float = 0f, insetBottom: Float = 0f
     ) {
         if (lines.isEmpty() || w <= 0f || h <= 0f) return
 
@@ -42,14 +43,16 @@ object OverlayRenderer {
         val blockW = pad + barW + gap + maxW + pad
         val blockH = pad * 2 + lh * lines.size
         val margin = min(w, h) * 0.045f
+        val areaTop = insetTop
+        val areaBottom = h - insetBottom
 
         val left: Float
         val top: Float
         when (position) {
-            1 -> { left = w - margin - blockW; top = h - margin - blockH }   // 우하
-            2 -> { left = margin;              top = margin }                 // 좌상
-            3 -> { left = w - margin - blockW; top = margin }                 // 우상
-            else -> { left = margin;           top = h - margin - blockH }    // 좌하
+            1 -> { left = w - margin - blockW; top = areaBottom - margin - blockH }   // 우하
+            2 -> { left = margin;              top = areaTop + margin }                // 좌상
+            3 -> { left = w - margin - blockW; top = areaTop + margin }                // 우상
+            else -> { left = margin;           top = areaBottom - margin - blockH }    // 좌하
         }
 
         val r = fs * 0.28f
